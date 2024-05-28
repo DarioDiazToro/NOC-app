@@ -1,7 +1,9 @@
+import { envs } from "../config/plugins/envs.plugin";
 import { CheckService } from "../domain/uses-cases/checks/check-service";
 import { FileDataSource } from "../infrasctructure/datasources/file-system.datasource";
 import { LogRepositoryImpl } from "../infrasctructure/repositories/log-repository.imple";
 import { cronService } from "./cron/cron-service";
+import { EmailService } from "./email/email.service";
 
 
 const fileSystemLogRepository = new LogRepositoryImpl(
@@ -9,32 +11,44 @@ const fileSystemLogRepository = new LogRepositoryImpl(
 );
 
 export class Server {
-    public static start() {
-
-
-        //  Mandar Email
+    public static async start() {
 
         console.log("Server started");
 
-        cronService.createJob(
-            '*/5 * * * * *',
-            () => {
-                const date = new Date();
-                // console.log("every 5 second", date);
-            }
-        )
+        // TODO:  Mandar Email
+        const emailService = new EmailService(fileSystemLogRepository);
 
-        cronService.createJob(
-            '*/5 * * * * *',
-            () => {
-                const url = "https://google.com";
-                new CheckService(
-                    fileSystemLogRepository,
-                    () => console.log(`${url} is ok`),
-                    (error) => console.log(error))
-                    .execute("http://google.com");
-            }
-        )
+        emailService.sendEmailWithFileSystemsLogs(
+            ["jaiverdiaztoro@gmail.com",]
+        );
+
+
+        // emailService.sendEmail({
+        //     to: "jaiverdiaztoro@gmail.com",
+        //     subject: "hola",
+        //     htmlBody: "ddd",
+        //     attachements: []
+        // });
+
+        // cronService.createJob(
+        //     '*/5 * * * * *',
+        //     () => {
+        //         const date = new Date();
+        //         // console.log("every 5 second", date);
+        //     }
+        // )
+
+        // cronService.createJob(
+        //     '*/5 * * * * *',
+        //     () => {
+        //         const url = "https://google.com";
+        //         new CheckService(
+        //             fileSystemLogRepository,
+        //             () => console.log(`${ url } is ok`),
+        //             (error) => console.log(error))
+        //             .execute("http://google.com");
+        //     }
+        // )
 
     };
 };
