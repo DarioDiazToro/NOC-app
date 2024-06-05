@@ -32,7 +32,7 @@ export class CheckService implements CheckServiceUseCase {
         } catch (error) {
             const errorMessage = `${url} is not ok. ${error}`;
 
-            const log = new LogEntity({ message: errorMessage, level: LogSeverityLevel.low, origin: "check-service.ts" });
+            const log = new LogEntity({ message: errorMessage, level: LogSeverityLevel.high, origin: "check-service.ts" });
             this.logRepository.saveLog(log);
             this.errorCallback && this.errorCallback(`${error}`);
             return false;
