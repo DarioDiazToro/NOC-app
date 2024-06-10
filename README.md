@@ -24,6 +24,6 @@ PROD=false
   ```
 5. Ejecutar el comando
  ```
- migrate dev
+   npx prisma migrate dev
  ```
 6. Ejecutar el comando ```npm run dev```
