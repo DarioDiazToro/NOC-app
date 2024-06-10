@@ -30,7 +30,7 @@ async function main() {
 
     // const logs = await prisma.logModel.findMany({ where: { level: "LOW" } });
     // console.log({ logs });
-    // // Server.start();
+    Server.start();
     // Crear una coleccion = tables, documento = registro
     // const newLog = await logModel.create({
     //     message: "Test message desde Mongo",

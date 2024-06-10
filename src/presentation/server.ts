@@ -1,19 +1,28 @@
-import { envs } from "../config/plugins/envs.plugin";
-import { LogRepository } from "../domain/repository/log.repository";
-import { CheckService } from "../domain/uses-cases/checks/check-service";
-import { LogSeverityLevel } from "../domain/uses-cases/checks/entities/log.entity";
-import { SendEmailLogs } from "../domain/uses-cases/email/send-email-logs";
-import { FileDataSource } from "../infrasctructure/datasources/file-system.datasource";
+
+import { CheckServiceMultiple } from "../domain/uses-cases/checks/check-service.multiple";
+import { FileSystemDataSource } from "../infrasctructure/datasources/file-system.datasource";
 import { MongoLogDatasource } from "../infrasctructure/datasources/mongo-log.datasource";
+import { PostgresLogDatasource } from "../infrasctructure/datasources/postgres-log.datasource";
 import { LogRepositoryImpl } from "../infrasctructure/repositories/log-repository.imple";
 import { cronService } from "./cron/cron-service";
 import { EmailService } from "./email/email.service";
 
 
-const logRepository = new LogRepositoryImpl(
-    // new FileDataSource(),
-    new MongoLogDatasource(),
+const fsLogRepository = new LogRepositoryImpl(
+    new FileSystemDataSource(),
+
 );
+
+const mongoLogRepository = new LogRepositoryImpl(
+    new MongoLogDatasource(),
+
+);
+
+const PostgresLogRepository = new LogRepositoryImpl(
+    new PostgresLogDatasource(),
+
+);
+
 
 const emailService = new EmailService();
 
@@ -41,23 +50,21 @@ export class Server {
         //     attachements: []
         // });
 
-        // cronService.createJob(
-        //     '*/5 * * * * *',
-        //     () => {
-        //         const url = "https://gooeegle.com";
-        //         new CheckService(
-        //             logRepository,
-        //             () => console.log(`${url} is ok`),
-        //             (error) => console.log(error),
-        //         ).execute(url);
-        //     }
-        // )
+        cronService.createJob(
+            '*/5 * * * * *',
+            () => {
+                const url = "https://gooeegle.com";
+                new CheckServiceMultiple(
+                    [fsLogRepository, PostgresLogRepository, mongoLogRepository],
+                    () => console.log(`${url} is ok`),
+                    (error) => console.log(error),
+                ).execute(url);
+            }
+        )
 
 
     };
 };
-
-
 
 
 

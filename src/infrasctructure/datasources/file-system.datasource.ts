@@ -5,7 +5,7 @@ import { LogEntity, LogSeverityLevel } from "../../domain/uses-cases/checks/enti
 
 
 
-export class FileDataSource implements LogDataSource {
+export class FileSystemDataSource implements LogDataSource {
 
 
     private readonly logPath = "logs/";
