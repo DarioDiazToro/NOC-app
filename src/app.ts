@@ -1,6 +1,5 @@
-import 'dotenv/config';
 import { Server } from "./presentation/server";
-import { MongoDataBase, logModel } from './data/mongo';
+import { MongoDatabase } from './data/mongo';
 import { envs } from './config/plugins/envs.plugin';
 import { PrismaClient } from '@prisma/client';
 
@@ -14,7 +13,7 @@ import { PrismaClient } from '@prisma/client';
 
 async function main() {
 
-    await MongoDataBase.connect({
+    await MongoDatabase.connect({
         mongoUrl: envs.MONGO_URL,
         dbName: envs.MONGO_DB_NAME,
     });

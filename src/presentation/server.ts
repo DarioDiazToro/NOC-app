@@ -53,7 +53,7 @@ export class Server {
         cronService.createJob(
             '*/5 * * * * *',
             () => {
-                const url = "https://gooeegle.com";
+                const url = "https://google.com";
                 new CheckServiceMultiple(
                     [fsLogRepository, PostgresLogRepository, mongoLogRepository],
                     () => console.log(`${url} is ok`),
@@ -63,8 +63,8 @@ export class Server {
         )
 
 
+        // };
     };
+
 };
-
-
 
